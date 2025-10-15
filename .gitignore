@@ -1,0 +1,86 @@
+# =========================
+# Global Node / TypeScript
+# =========================
+node_modules/
+dist/
+build/
+.cache/
+.temp/
+tmp/
+*.log
+*.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+!.env.example
+client-side/.env
+client-side/.env.*
+!client-side/.env.example
+server-side/.env
+server-side/.env.*
+!server-side/.env.example
+
+# =========================
+# System / OS Files
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# =========================
+# IDE / Editor Folders
+# =========================
+.vscode/
+.idea/
+*.iml
+
+# =========================
+# Build Tools & Coverage
+# =========================
+coverage/
+.nyc_output/
+reports/
+jest-cache/
+*.tsbuildinfo
+
+# =========================
+# Frontend Build Artifacts
+# =========================
+client-side/build/
+client-side/dist/
+client-side/node_modules/
+
+# =========================
+# Backend Build Artifacts
+# =========================
+server-side/dist/
+server-side/node_modules/
+
+# =========================
+# Logs / Dumps
+# =========================
+logs/
+*.log
+*.out
+*.pid
+
+# =========================
+# Certificates / Keys
+# =========================
+certs/
+*.pem
+*.crt
+*.key
+
+# =========================
+# OS-specific
+# =========================
+ehthumbs.db
+Icon?
