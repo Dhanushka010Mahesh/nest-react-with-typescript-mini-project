@@ -74,19 +74,3 @@ ehthumbs.db
 Icon?
 
 
-# -----------------------------
-# Spring Boot (inside backend-server)
-# -----------------------------
-backend-server/target/
-backend-server/build/
-backend-server/out/
-backend-server/.gradle/
-backend-server/.mvn/
-backend-server/.settings/
-backend-server/.classpath
-backend-server/.project
-
-# Ignore JAR/WAR/EAR files
-backend-server/*.jar
-backend-server/*.war
-backend-server/*.ear
