@@ -139,7 +139,7 @@ const handleDelete = async (id: number) => {
                     <tr key={product.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-6 text-gray-600">{product.id}</td>
                       <td className="py-4 px-6 text-gray-800 font-medium">{product.name}</td>
-                      <td className="py-4 px-6 text-gray-800">${product.price.toFixed(2)}</td>
+                      <td className="py-4 px-6 text-gray-800">${product.price}</td>
                       <td className="py-4 px-6 text-right">
                         <button
                           onClick={() => openModal(product)}
@@ -166,8 +166,9 @@ const handleDelete = async (id: number) => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+        // <div className="fixed inset-0 bg-amber-300 bg-opacity-50 flex items-center justify-center p-4 z-50">
+         <div className="fixed inset-0 bg-black-500/5 backdrop-blur-md flex items-center justify-center p-4 z-50">
+  <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"

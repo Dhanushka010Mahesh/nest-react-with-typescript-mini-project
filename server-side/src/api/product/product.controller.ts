@@ -1,43 +1,39 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('/all')
-  getAllProducts(): Product[] {
+  async getAllProducts(): Promise<Product[]> {
     return this.productService.getAllProducts();
   }
 
   @Get('/single/:id')
-  getProductById(@Param('id') id: number): Product | undefined {
+  async getProductById(@Param('id') id: number): Promise<Product | null> {
     return this.productService.getProductById(id);
   }
 
   @Post('/create')
-  createProduct(@Body() body: { name: string; price: number }): Product {
-    return this.productService.createProduct(body.name, body.price);
+  async createProduct(@Body() body: CreateProductDto): Promise<Product> {
+    return this.productService.createProduct(body);
   }
 
   @Put('/update/:id')
-  updateProduct(
+  async updateProduct(
     @Param('id') id: number,
-    @Body() body: { name: string; price: number },
-  ): Product | undefined {
-    return this.productService.updateProduct(id, body.name, body.price);
+    @Body() body: UpdateProductDto,
+  ): Promise<Product | null> {
+    return this.productService.updateProduct(id, body);
   }
 
   @Delete('/delete/:id')
-  deleteProduct(@Param('id') id: number): { success: boolean } {
-    const success = this.productService.deleteProduct(id);
+  async deleteProduct(@Param('id') id: number): Promise<{ success: boolean }> {
+    const success = await this.productService.deleteProduct(id);
     return { success };
   }
-
 }

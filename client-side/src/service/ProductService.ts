@@ -13,7 +13,6 @@ export interface ProductPayload {
 
 export const ProductService = {
   getAllProducts: async (): Promise<Product[]> => {
-    console.log("Fetching products from API...");
     try {
       const response = await api.get<Product[]>("/product/all");
       return response.data;
