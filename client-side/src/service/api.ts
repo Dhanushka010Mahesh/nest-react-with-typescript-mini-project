@@ -5,7 +5,7 @@ import axios from "axios";
 //OR
 //http://localhost:6050/api/v1/ nestJS
 const api = axios.create({
-  baseURL: "http://localhost:6050/api/v1/",
+  baseURL: "http://localhost:7001/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },

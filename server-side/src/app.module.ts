@@ -21,8 +21,15 @@ import { join } from 'path';
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        ssl: {
-          rejectUnauthorized: false, // Fix for self-signed certificate
+        ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+          // Connection pool configuration
+          max: 20,
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 2000,
         },
         entities: [join(__dirname, '**', '*.entity.{ts,js}')], // Fixed entity path
       }),
