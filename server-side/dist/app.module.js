@@ -20,28 +20,34 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                envFilePath: '.env',
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
-                useFactory: (configService) => ({
-                    type: 'postgres',
-                    host: configService.get('DATABASE_HOST'),
-                    port: configService.get('DATABASE_PORT'),
-                    username: configService.get('DATABASE_USER'),
-                    password: configService.get('DATABASE_PASSWORD'),
-                    database: configService.get('DATABASE_NAME'),
-                    ssl: true,
-                    extra: {
-                        ssl: {
+                useFactory: (configService) => {
+                    const isProduction = configService.get('NODE_ENV') === 'production';
+                    return {
+                        type: 'postgres',
+                        host: configService.get('DATABASE_HOST') || 'localhost',
+                        port: parseInt(configService.get('DATABASE_PORT') || '5432', 10),
+                        username: configService.get('DATABASE_USER') || 'postgres',
+                        password: configService.get('DATABASE_PASSWORD'),
+                        database: configService.get('DATABASE_NAME') || 'nestjs_db',
+                        ssl: isProduction ? {
                             rejectUnauthorized: false,
+                        } : false,
+                        extra: {
+                            max: 20,
+                            idleTimeoutMillis: 30000,
+                            connectionTimeoutMillis: 2000,
                         },
-                        max: 20,
-                        idleTimeoutMillis: 30000,
-                        connectionTimeoutMillis: 2000,
-                    },
-                    entities: [(0, path_1.join)(__dirname, '**', '*.entity.{ts,js}')],
-                }),
+                        entities: [(0, path_1.join)(__dirname, '**', '*.entity.{ts,js}')],
+                        synchronize: !isProduction,
+                        logging: !isProduction,
+                        dropSchema: false,
+                    };
+                },
             }),
             product_module_1.ProductModule,
         ],

@@ -25,55 +25,77 @@ const App: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Fetch products
-const fetchProducts = async () => {
-  try {
-    setLoading(true);
-    const data = await ProductService.getAllProducts();
-    setProducts(data);
-  } catch (err: any) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
-  // Create / update product
-const handleSubmit = async () => {
-  const payload: ProductPayload = {
-    name: formData.name,
-    price: parseFloat(formData.price),
+  // Fetch products - Updated to use ServiceResult
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const result = await ProductService.getAllProducts();
+      
+      if (result.success && result.data) {
+        setProducts(result.data);
+      } else {
+        setError(result.error || 'Failed to fetch products');
+      }
+    } catch (err: any) {
+      setError('Unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  try {
-    setLoading(true);
-    if (editingProduct) {
-      await ProductService.updateProduct(editingProduct.id, payload);
-    } else {
-      await ProductService.createProduct(payload);
-    }
-    await fetchProducts();
-    closeModal();
-  } catch (err: any) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  // Create / update product - Updated to use ServiceResult
+  const handleSubmit = async () => {
+    const payload: ProductPayload = {
+      name: formData.name,
+      price: parseFloat(formData.price),
+    };
 
-  // Delete product
-const handleDelete = async (id: number) => {
-  if (!window.confirm("Are you sure?")) return;
-  try {
-    setLoading(true);
-    await ProductService.deleteProduct(id);
-    await fetchProducts();
-  } catch (err: any) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setLoading(true);
+      setError('');
+      
+      let result;
+      if (editingProduct) {
+        result = await ProductService.updateProduct(editingProduct.id, payload);
+      } else {
+        result = await ProductService.createProduct(payload);
+      }
+      
+      if (result.success) {
+        await fetchProducts();
+        closeModal();
+      } else {
+        setError(result.error || 'Operation failed');
+      }
+    } catch (err: any) {
+      setError('Unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Delete product - Updated to use ServiceResult
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("Are you sure?")) return;
+    
+    try {
+      setLoading(true);
+      setError('');
+      
+      const result = await ProductService.deleteProduct(id);
+      
+      if (result.success) {
+        await fetchProducts();
+      } else {
+        setError(result.error || 'Failed to delete product');
+      }
+    } catch (err: any) {
+      setError('Unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openModal = (product?: Product) => {
     if (product) {
@@ -166,9 +188,8 @@ const handleDelete = async (id: number) => {
       </div>
 
       {showModal && (
-        // <div className="fixed inset-0 bg-amber-300 bg-opacity-50 flex items-center justify-center p-4 z-50">
-         <div className="fixed inset-0 bg-black-500/5 backdrop-blur-md flex items-center justify-center p-4 z-50">
-  <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
